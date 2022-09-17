@@ -1,0 +1,602 @@
+---
+title: "RETO ESTADISTICA SALARIOS"
+author: "María del Carmen Vargas Villarreal A00828570"
+date: "2022-08-22"
+always_allow_html: true
+output:
+  pdf_document: default
+  html_document: default
+---
+# *1. EXPLORACIÓN DE LA BASE DE DATOS*
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+```
+# A) Accede a la base de datos de Data Science Jobs Salaries
+
+```{r}
+datos_salarios <- read.csv("ds_salaries.csv", header=TRUE)
+#datos_salarios
+```
+
+# B) Explora las variables y familiarizate con su significado
+## 1) Identifica la cantidad de datos y variables presentes.
+```{r}
+
+# Dimesión del data frame (renglones = cantidad de datos, columnas = cantidad de variables)
+dim(datos_salarios)
+```
+## 2) Clasifica las variables de acuerdo a su tipo y escala de medición.
+
+```{r}
+
+# Variables categóricas. 
+# Debajo de cada variable se puede observar el tipo de variable, ya sea tipo <int> o tipo <char>
+
+categoricas = datos_salarios[, c( 'experience_level', 'employment_type', 'job_title', 'salary_currency', 'employee_residence', 'company_location', 'company_size')]
+
+head(categoricas)
+```
+
+```{r}
+
+# Variables númericas 
+# Debajo de cada variable se puede observar el tipo de variable, de tipo <int>
+
+numericas = datos_salarios[, c('salary', 'salary_in_usd', 'work_year', 'remote_ratio')]
+
+head(numericas)
+```
+# C) Exploración de la base de datos
+
+## 1) Cálculo de medidas estadísticas:  
+
+## Variables cuantitativas
+
+### Medidas de tendencia central: promedio, media, mediana y moda de los datos.
+```{r}
+
+# Medidas de tendencia central: Min, Max, Promedio, media, mediana, 1st Quartile, 3rd Quartile
+summary(numericas)
+
+```
+```{r}
+
+# Medidas de dispersión solo para Salary
+
+# Summary de variable salario
+summary(datos_salarios$salary)
+```
+```{r}
+
+# Medidas de dispersión solo para Salary in USD
+
+summary(datos_salarios$salary_in_usd)
+```
+```{r}
+# Medidas de dispersión solo para Work Year
+
+summary(datos_salarios$work_year)
+```
+```{r}
+# Medidas de dispersión solo para Remote Ratio
+
+summary(datos_salarios$remote_ratio)
+```
+
+### Medidas de dispersión: rango: máximo - mínimo, varianza, desviación estándar.
+
+```{r}
+# Medidas de dispersión: Varianza y desviación estándar para Salary
+
+var(datos_salarios$salary) 
+
+sd(datos_salarios$salary)
+
+```
+```{r}
+# Medidas de dispersión: Varianza y desviación estándar para Salary in USD
+
+var(datos_salarios$salary_in_usd) 
+
+sd(datos_salarios$salary_in_usd)
+```
+```{r}
+# Medidas de dispersión: Varianza y desviación estándar para Work Year
+
+var(datos_salarios$work_year) 
+
+sd(datos_salarios$work_year)
+```
+```{r}
+# Medidas de dispersión: Varianza y desviación estándar para Remote Ratio
+
+var(datos_salarios$remote_ratio) 
+
+sd(datos_salarios$remote_ratio)
+```
+
+
+#  Variables cualitativas
+
+### Tabla de distribución de frecuencia
+###  Moda
+
+```{r}
+# options(scipen = 500)
+```
+
+*Experience Level*
+```{r}
+
+# Para ver la cantidad de datos por cada categoria de Experience Level (se observa en la consola)
+print("Experience Level")
+table(datos_salarios$experience_level)
+
+# Paquete que te da atuomáticamente la tabla de distribución de frecuencias (incluyendo la cantidad en cada barra, porcentaje correspondiente y porcentaje cumulativo) para Employmet Type, y en orden descendiente. 
+install.packages('epiDisplay')
+library(epiDisplay)
+tab1(datos_salarios$experience_level, sort.group = "decreasing", cum.percent = TRUE)
+
+```
+*Employment Type*
+
+```{r}
+
+# Para ver la cantidad de datos por cada categoria de Employment type (se observa en la consola)
+print("Employment type")
+table(datos_salarios$employment_type)
+
+# Paquete que te da atuomáticamente la distribución de frecuencias (incluyendo la cantidad en cada barra, porcentaje correspondiente y porcentaje cumulativo) para Employmet Type, y en orden descendiente. 
+install.packages('epiDisplay')
+library(epiDisplay)
+tab1(datos_salarios$employment_type, sort.group = "decreasing", cum.percent = TRUE)
+```
+
+*Job Title*
+
+
+```{r}
+library(ggplot2)
+# Para ver la cantidad de datos por cada categoria de Job title (se observa en la consola)
+print("Job title")
+table(datos_salarios$job_title)
+
+
+# Paquete que te da atuomáticamente la tabla de distribución de frecuencias (incluyendo la cantidad en cada barra, porcentaje correspondiente y porcentaje cumulativo) para Employmet Type, y en orden descendiente. 
+install.packages('epiDisplay')
+library(epiDisplay)
+tab1(datos_salarios$job_title, sort.group = "decreasing", cum.percent = TRUE)
+
+
+```
+*Salary Currency*
+
+```{r}
+
+# Para ver la cantidad de datos por cada categoria de Salary Currency (se observa en la consola)
+print("Salary Currency")
+table(datos_salarios$salary_currency)
+
+
+# Paquete que te da atuomáticamente la distribución de frecuencias (incluyendo la cantidad en cada barra, porcentaje correspondiente y porcentaje cumulativo) para Salary Currency, y en orden descendiente. 
+install.packages('epiDisplay')
+library(epiDisplay)
+tab1(datos_salarios$salary_currency, sort.group = "decreasing", cum.percent = TRUE, width=0.9)
+
+
+```
+*Employee Residence*
+
+```{r}
+
+# Para ver la cantidad de datos por cada categoria de Employee Residence (se observa en la consola)
+print("Employee residence")
+table(datos_salarios$employee_residence)
+
+# Paquete que te da atuomáticamente la distribución de frecuencias (incluyendo la cantidad en cada barra, porcentaje correspondiente y porcentaje cumulativo) para Employmet Type, y en orden descendiente. 
+install.packages('epiDisplay')
+library(epiDisplay)
+tab1(datos_salarios$employee_residence, sort.group = "decreasing", cum.percent = TRUE)
+
+
+```
+
+*Company Location*
+
+```{r}
+
+
+# Para ver la cantidad de datos por cada categoria de Company Location (se observa en la consola)
+print("Company Location")
+table(datos_salarios$company_location)
+
+
+# Paquete que te da atuomáticamente la distribución de frecuencias (incluyendo la cantidad en cada barra, porcentaje correspondiente y porcentaje cumulativo) para Company Location, y en orden descendiente. 
+install.packages('epiDisplay')
+library(epiDisplay)
+tab1(datos_salarios$company_location, sort.group = "decreasing", cum.percent = TRUE)
+
+
+
+```
+*Company Size*
+
+```{r}
+
+
+# Para ver la cantidad de datos por cada categoria de Company Size 
+print("Company Size")
+table(datos_salarios$company_size)
+
+# Paquete que te da atuomáticamente la distribución de frecuencias (incluyendo la cantidad en cada barra, porcentaje correspondiente y porcentaje cumulativo) para Company Location, y en orden descendiente. 
+install.packages('epiDisplay')
+library(epiDisplay)
+tab1(datos_salarios$company_size, sort.group = "decreasing", cum.percent = TRUE)
+
+
+
+```
+
+
+
+
+## 2) Explora los datos usando herramientas de visualización:
+
+## Variables cuantitativas:
+### Medidas de posición: cuartiles, outlier (valores atípicos), boxplots
+
+
+```{r}
+# Boxplot para Salary 
+
+summary(datos_salarios$salary)
+
+ggplot(datos_salarios) +
+  aes(x = "", y = salary) +
+  geom_boxplot(fill = "#0c4c8a") +
+  theme_minimal()
+```
+
+
+
+
+```{r}
+
+# Boxplot para Salary in USD
+
+summary(datos_salarios$salary_in_usd)
+
+ggplot(datos_salarios) +
+  aes(x = "", y = salary_in_usd) +
+  geom_boxplot(fill = "#0c4c8a") +
+  theme_minimal()
+```
+
+```{r}
+
+# Boxplot para Work Year
+summary(datos_salarios$work_year)
+
+ggplot(datos_salarios) +
+  aes(x = "", y = work_year) +
+  geom_boxplot(fill = "#0c4c8a") +
+  theme_minimal()
+
+
+```
+```{r}
+# Boxplot para Remote Ratio
+
+summary(datos_salarios$remote_ratio)
+
+
+ggplot(datos_salarios) +
+  aes(x = "", y = remote_ratio) +
+  geom_boxplot(fill = "#0c4c8a") +
+  theme_minimal()
+```
+
+
+
+### Análisis de distribución de los datos (Histogramas). Identificar si tiene forma simétrica o asimétrica
+
+*Histograma de Salary*
+```{r}
+hist(datos_salarios$salary)
+```
+
+*Histograma de Salary in usd*
+
+```{r}
+hist(datos_salarios$salary_in_usd)
+```
+*Histograma de Work Year*
+
+```{r}
+hist(datos_salarios$work_year)
+```
+*Histograma de Remote Ratio*
+
+```{r}
+hist(datos_salarios$remote_ratio)
+
+```
+
+## Variables categóricas
+### Distribución de los datos (diagramas de barras, diagramas de pastel)
+```{r}
+# Para ver distribución por colores de Employment Level
+
+ggplot(data=datos_salarios) + 
+geom_bar(aes(x = experience_level,  fill = experience_level))  + labs(title="Distribución de frecuencias de Experience Level", x = "Experience level", y = "Frecuencia", subtitle = " EN Entry-level / Junior MI Mid-level / Intermediate SE Senior-level / Expert EX Executive-level / Director")
+```
+```{r}
+# Para ver distribución por colores de Employment Type
+
+ggplot(data=datos_salarios) + 
+geom_bar(aes(x = employment_type,  fill = employment_type))  + labs(title="Distribución de Employment Type", x = "Employment type", y = "Frecuencia", subtitle = "PT:Part-time FT:Full-time CT:Contract FL:Freelance")
+```
+
+
+```{r}
+# Para ver distribución de Job Title
+
+ggplot(data = datos_salarios, aes(x = job_title), size(0.30)) +
+    geom_bar(position = "dodge",  width=0.9)+coord_flip() + theme(plot.margin = margin(0.0001,.8,0.02,.15, "cm")) + labs(title="Distribución de Job title", x = "Job title ", y = "Frecuencia")
+```
+
+
+```{r}
+# Para ver la tabla de frecuencias por colores de Salary Currency
+
+ggplot(data=datos_salarios) + 
+geom_bar(aes(x = salary_currency,  fill = salary_currency))  + labs(title="Distribución de Salary Currency", x = "Salary Currency ", y = "Frecuencia")+coord_flip() 
+```
+
+
+```{r}
+# Para ver distribución por colores de Employee Residence
+
+ggplot(data=datos_salarios) + 
+geom_bar(aes(x = employee_residence,  fill = employee_residence))  + labs(title="Distribución de Employmee Residence", x = "Employment residence", y = "Frecuencia") + coord_flip() + theme(plot.margin = margin(0.00008,.8,0.009,.19, "cm"))
+```
+
+```{r}
+
+# Para ver distribución  por colores de Company Location 
+ggplot(data=datos_salarios) + 
+geom_bar(aes(x = company_location,  fill = company_location))  + labs(title="Distribución de Company Location", x = "Company Location", y = "Frecuencia") + coord_flip() + theme(plot.margin = margin(0.00008,.8,0.009,.19, "cm"))
+```
+
+```{r}
+# Para ver distribución  por colores de Company Size 
+ggplot(data=datos_salarios) + 
+geom_bar(aes(x = company_size,  fill = company_size))  + labs(title="Distribución de Company Size", x = "Company Size", y = "Frecuencia")
+```
+
+# D) Preparación de los datos
+
+## 1) Selecciona el conjunto de datos a utilizar  
+
+Tomando en consideración las preguntas objetivo a contestar:
+2. ¿En qué países se ofrecen mejores salarios?
+El conjunto de datos necesarios son: 
+- company_location y salary_in_usd
+
+Para este caso, se incluyó una nueva base de datos llamada iso3166, y a partir de ella se pudo graficar un mapa mundial asociado a los paises incluidos en "company_location" del data set original siendo Salaries.csv. 
+
+También se incluyó una nueva variable para transformar la columna de "company_location" en 0 y 1 para facilitar la visualización. Al ser un primer acercamiento, faltan cosas por mejorar en dicha gráfica del mundo como asociar por colores el salario promedio, pero por el momento funciona para ver con qué paises se está trabajando. 
+
+Así mismo, se dio con la respuesta con una gráfica de barras. (Procedimiento se encontrará más adelante)
+
+3. ¿Se han incrementado los salarios a lo largo del tiempo?
+- salary_in_usd y work_year
+
+En este caso no se requirió de transformar, discretizar, agregar variables y demás. Se obtuvo la respuesta de manera directa al graficar el promedio de Salary in USD vs Work Year. (Procedimiento se encontrará más adelante)
+
+6. ¿Qué tipo de contrato (parcial, tiempo completo, etc) ofrece mejores salarios? ¿Qué tipo de contrato será el más conveniente?
+El conjunto de datos necesarios son: 
+- experience_level y salary_in_usd
+
+En este caso no se requirió de transformar, discretizar, agregar variables y demás. Se obtuvo la respuesta de manera directa al graficar el promedio de Salary in USD vs Employment Type. (Procedimiento se encontrará más adelante)
+ 
+
+4. ¿Influye el nivel de experiencia en el salario?
+El conjunto de datos necesarios son: 
+- experience_level y salary_in_usd
+
+En este caso no se requirió de transformar, discretizar, agregar variables y demás. Se obtuvo la respuesta de manera directa al graficar el promedio de Salary in USD vs Experience level. (Procedimiento se encontrará más adelante)
+
+
+
+
+## Procedimiento para responder a "2. ¿En qué países se ofrecen mejores salarios?"
+```{r}
+# Cargamos las librerias a utilizar 
+library(countrycode)
+library(highcharter)
+library(dplyr)
+library(maps)
+```
+
+```{r}
+# Para ver las abreviaturas con las que se están trabajando en Salaries.csv
+#datos_salarios$company_location
+```
+
+```{r}
+# Cargamos dataset iso3166, ya que es el tipo de "country code" que se utiliza en los datos originales de Salaries.csv, y servirá para asociar los países con las abreviaturas
+
+dat <- iso3166
+head(dat)
+```
+```{r}
+
+# Renombramos la variable a3 a iso-a3, con el fin de identificar más fácilmente esta variable al momento de graficarla en el mapa global
+
+dat <- rename(dat, "iso-a3" = a3)
+head(dat)
+```
+
+
+```{r}
+
+# Se imprimen los códigos de los países que se encuentran en "Salaries.csv", con el fin de comparar qué columna coincide con la que cargamos anteriormente
+
+countries_of_company_location <- datos_salarios$company_location
+countries_of_company_location
+
+```
+
+```{r}
+
+# La columna "a2" del data set cargado coincide con el mismo tipo de dato y valor de la columna "company_location", por lo que se crea un condicional para asignar un 1 a los paises que coincidan con nuestra base de datos "Salaries", y 0 a los que no. 
+
+dat$countries_of_company_location <- ifelse(dat$`a2` %in% countries_of_company_location, 1, 0)
+head(dat, 10) # Se encuentra en la última columna esta nueva variable
+```
+
+```{r}
+
+# Aqui se genera el mapa, marcando en azul los paises que corresponden a "company_location" del dataset "Salaries.csv", con el fin de observar de manera gráfica los paises en lugar de solo ver las abreviaturas.
+
+hcmap( # hcmap viene del paquete {highcharter}
+  map = "custom/world-highres3", # Este parámetro muestra un mapa en alta resolución
+  data = dat, # name of dataset
+  joinBy = "iso-a3",
+  value = "countries_of_company_location",
+  showInLegend = FALSE, # hide legend
+  nullColor = "#DADADA",
+  download_map_data = TRUE
+) %>%
+  hc_mapNavigation(enabled = FALSE) %>%
+  hc_legend("none") %>%
+  hc_title(text = "Paises que se encuentran en la columna Location Company")
+```
+
+
+
+```{r}
+# Ahora se grafica un diagrama de barras, representando el Salary in USD vs company Location
+ggplot(data=datos_salarios) + 
+geom_bar(aes(x = company_location, y = salary_in_usd, fill = company_location), stat = "summary", fun = "mean") +
+  labs(title="Salario promedio en USD por Localización de las Compañias", x = "Company Location", y = "Avg Salary in USD")+ coord_flip()
+```
+```{r}
+
+# Al ser 50 paises, es difícil observar cuáles realmente ofrecen un mejor salario en promedio. Por lo que se realizará el siguiente procedimiento que consiste de agrupar los datos por company_location y obtener su promedio de salary_in_usd correspondiente
+
+
+groupb_by_company_location_salary_in_usd = datos_salarios %>% group_by(company_location)  %>%
+                    summarise(salary_in_usd = mean(salary_in_usd),
+                              .groups = 'drop')
+groupb_by_company_location_salary_in_usd
+
+```
+
+```{r}
+
+# Ahora lo que se realiza es ordenar de mayor a menor los datos, observando directamente el top 10 paises que ofrecen el mejor salario: 
+
+groupb_by_company_location_salary_in_usd_decreasing <- groupb_by_company_location_salary_in_usd[order(groupb_by_company_location_salary_in_usd$salary_in_usd, decreasing = TRUE), ]  # Order data descending
+groupb_by_company_location_salary_in_usd_decreasing
+```
+
+```{r}
+
+# Ahora se grafican los TOP 10 países con promedio de salario más alto para visualizarlo gráficamente
+groupb_by_company_location_salary_in_usd_decreasing_TOP10 = groupb_by_company_location_salary_in_usd_decreasing[1:10,]
+
+groupb_by_company_location_salary_in_usd_decreasing_TOP10
+print("US United States / RU Rusia / NZ New Zealand / JP Japan / IQ Iraq / IR Israel / DZ Algeria / CA Canada / AU Australia / AE United Arab Emirates")
+
+ggplot(data=groupb_by_company_location_salary_in_usd_decreasing_TOP10) + 
+geom_bar(aes(x = company_location, y = salary_in_usd, fill = company_location), stat = "identity") +
+  labs(title="Salario promedio en USD por Localización de las Compañias", x = "Company Location", y = "Avg Salary in USD", subtitle = " US United States / RU Rusia / NZ New Zealand / JP Japan / IQ Iraq / IR Israel / DZ Algeria / CA Canada / AU Australia / AE United Arab Emirates")+ coord_flip() 
+```
+
+```{r}
+#testing1 <- dat[(dat$a2 == "AE"),]
+#testing1
+```
+
+Respuesta: Con esta gráfica, se puede responder más fácilmente la pregunta "¿En qué países se ofrecen mejores salarios?". Observando la gráfica, los paises que ofrecen mejores salarios son: 
+- US United States 
+- RU Rusia 
+- NZ New Zealand 
+- JP Japan 
+- IQ Iraq 
+- IR Israel
+- DZ Algeria 
+- CA Canada
+- AU Australia 
+- AE United Arab Emirates
+
+
+## Procedimiento para responder a "3. ¿Se han incrementado los salarios a lo largo del tiempo?"
+
+```{r}
+# Ahora se grafica un diagrama de barrar, representando el Salary in USD vs Work Year
+ggplot(data=datos_salarios) + 
+geom_bar(aes(x = work_year, y = salary_in_usd, fill = work_year), stat = "summary", fun = "mean") +
+  labs(title="Salario promedio en USD por Año", x = "Work Year", y = "Avg Salary in USD")+ coord_flip()
+```
+
+Respuesta: Como se observa la gráfica, obteniendo los promedios de Salary in USD por año, se puede afirmar que a medida que pasan los años incrementa considerablemente el salario promedio, llegando a más de 120,000 dólares. 
+
+Con la siguiente gráfica también se puede observar qué "Job title" tiene un mejor salario promedio a medida que pasa el tiempo:
+
+```{r}
+options(scipen = 500)
+
+ggplot(data=datos_salarios) +
+geom_bar(aes(x = salary_in_usd, y = job_title, fill = work_year), stat = "summary", fun = "mean") +
+      labs(title="Salario promedio en USD por Posición de trabajo y Años", x = "Job Title", y = "Avg Salary in USD")
+```
+Al parecer, viendo la gráfica, "Data Analytics Lead" tiene el mejor salario en la actualidad. Y para comprobarlo:
+
+```{r}
+datos_salarios_testing <- datos_salarios[(datos_salarios$job_title == "Data Analytics Lead"),]
+datos_salarios_testing
+```
+Con el siguiente filtro se puede corrobar la información observada de la gráfica, al igual que ver las siguientes posiciones con los salarios más altos de manera descendiente:
+```{r}
+groupb_by_job_title_salary_in_usd = datos_salarios %>% group_by(job_title)  %>%
+                    summarise(salary_in_usd = mean(salary_in_usd),
+                              .groups = 'drop')
+groupb_by_job_title_salary_in_usd
+
+groupb_by_job_title_salary_in_usd_decreasing <- groupb_by_job_title_salary_in_usd[order(groupb_by_job_title_salary_in_usd$salary_in_usd, decreasing = TRUE), ] 
+groupb_by_job_title_salary_in_usd_decreasing
+```
+
+
+## Procedimiento para responder a "6. ¿Qué tipo de contrato (parcial, tiempo completo, etc) ofrece mejores salarios? ¿Qué tipo de contrato será el más conveniente?"
+
+
+```{r}
+ggplot(data=datos_salarios) + 
+geom_bar(aes(x = employment_type, y = salary_in_usd, fill = employment_type), stat = "summary", fun = "mean") +
+  labs(title="Salario promedio en USD por Tipo de Contrato", x = "Employment Type", y = "Avg Salary in USD", subtitle = "PT:Part-time FT:Full-time CT:Contract FL:Freelance")
+
+
+```
+Respuesta: Como se observa, el tipo de contrato "CT: Contract" ofrece mejor salario, mientras que "PT: Part Time" el más bajo, lo cual tiene sentido debido a la cantidad de horas laborales que diferencian el tipo de contrato.
+
+
+## Procedimiento para responder a "6. ¿Qué tipo de contrato (parcial, tiempo completo, etc) ofrece mejores salarios? ¿Qué tipo de contrato será el más conveniente?"
+
+```{r}
+ggplot(data=datos_salarios) + 
+geom_bar(aes(x = experience_level, y = salary_in_usd, fill = experience_level), stat = "summary", fun = "mean") +
+  labs(title="Salario promedio en USD por Nivel de Experiencia", x = "Experience Level", y = "Avg Salary in USD", subtitle = "EN Entry-level / Junior MI Mid-level / Intermediate SE Senior-level / Expert EX Executive-level / Director")
+```
+
+Respuesta: El nivel de experiencia si influye en el salario promedio que gana los especialistas, siendo Expert EX Executive-level / Director el más alto, superando los 150,000 dólares al año. 
+
+
+
+
+
